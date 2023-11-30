@@ -1,0 +1,650 @@
+---
+name: RN028
+description: RN 029
+priority: 1
+condition: "((registroDTO.getCveDelegacionPatron() != null && registroDTO.getCveDelegacionPatron().matches(\"^[0-9]{1,2}$\")) &&
+            (registroDTO.getCveDelegacionNss() != null && registroDTO.getCveDelegacionNss().matches(\"^[0-9]{1,2}$\"))) ?
+            Integer.valueOf(registroDTO.getCveDelegacionPatron()).equals(Integer.valueOf(registroDTO.getCveDelegacionNss())) : false"
+actions:
+ - "registroDTO.setCveEstadoRegistro(\"1\")"
+ - "registroDTO.setDesEstadoRegistro(\"Correcto\")" 
+---
+name: RN011
+description: RN 011
+priority: 1
+condition:  "((registroDTO.getCveDelegacionPatron() != null && registroDTO.getCveDelegacionPatron().matches(\"^[0-9]{1,2}$\")) &&
+            (registroDTO.getCveDelegacionNss() != null && registroDTO.getCveDelegacionNss().matches(\"^[0-9]{1,2}$\"))) ?
+            !(Integer.valueOf(registroDTO.getCveDelegacionPatron()).equals(Integer.valueOf(registroDTO.getCveDelegacionNss()))) : false"
+actions:
+ - "registroDTO.setCveEstadoRegistro(\"-1\")"
+ - "registroDTO.setDesEstadoRegistro(\"Otras delegaciones\")" 
+---
+name: RN004 Nss Obligatorio
+description: RN 004 Nss Obligatorio
+priority: 1
+condition: "registroDTO.getNumNss() == null || registroDTO.getNumNss().trim().equals(\"\")"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN 004 Nss Obligatorio\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4030\")"
+ - "bitacoraErroresDTO.setDesCampo(\"N\u00FAmero de Seguridad Social\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar que cuenta con la longitud de 11 caracteres num\u00E9ricos.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Nss Obligatorio\" );"
+---
+name: RN004 Nss
+description: RN 004 Nss
+priority: 1
+condition: "!(registroDTO.getNumNss() == null || registroDTO.getNumNss().trim().equals(\"\")) ?
+             registroDTO.getNumNss().matches(\"^[0-9]{11}$\") == false : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN 004 Nss\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"2\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Estructura del campo\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4030\")"
+ - "bitacoraErroresDTO.setDesCampo(\"N\u00FAmero de Seguridad Social\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar que cuenta con la longitud de 11 caracteres num\u00E9ricos.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Nss Incumplida\" );"
+---
+name: RN004 Nss BDTU
+description: RN 004 Nss
+priority: 1
+condition: "(registroDTO.getNumNss() != null || !registroDTO.getNumNss().trim().equals(\"\")) ?
+            (registroDTO.getNumNss().matches(\"^[0-9]{11}$\") ? !registroDTO.isNssExisteBDTU() : false) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN 004 Nss\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"2\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Estructura del campo\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4030\")"
+ - "bitacoraErroresDTO.setDesCampo(\"N\u00FAmero de Seguridad Social\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar si existe el campo N\u00FAmero de Seguridad Social en BDTU.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Nss Incumplida\" );"
+---
+name: RN004 RegPat Obligatorio
+description: RN004 RegPat Obligatorio
+priority: 1
+condition: "registroDTO.getRefRegistroPatronal() == null || registroDTO.getRefRegistroPatronal().trim().equals(\"\")"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 RegPat Obligatorio\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4032\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Registro Patronal\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar que cuenta con la longitud de 11 caracteres num\u00E9ricos.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Nss Obligatorio\" );"
+---
+name: RN004 RegPat
+description: RN 004 RegPat
+priority: 1
+condition: "!(registroDTO.getRefRegistroPatronal() == null || registroDTO.getRefRegistroPatronal().trim().equals(\"\")) ?
+              registroDTO.getRefRegistroPatronal().matches(\"^[A-Za-z0-9]{11}$\") == false : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN 004 RegPat\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"2\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Estructura del campo\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4032\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Registro Patronal\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar que cuenta con la longitud de 11 caracteres alfanum\u00E9ricos.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 RegPat Incumplida\" );"
+---
+name: RN004 RegPat BDTU
+description: RN 004 RegPat BDTU
+priority: 1
+condition: "(registroDTO.getRefRegistroPatronal() != null || !registroDTO.getRefRegistroPatronal().trim().equals(\"\")) ?
+            (registroDTO.getRefRegistroPatronal().matches(\"^[A-Za-z0-9]{11}$\") ? registroDTO.getCveDelegacionPatron().equals(\"00\") : false ) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN 004 RegPat BDTU\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"2\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Estructura del campo\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4032\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Registro Patronal\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar si existe el campo Registro Patronal en BDTU.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 RegPat Incumplida\" );"
+---
+name: RN004 RegPat Modalidad
+description: RN 004 RegPat Modalidad
+priority: 1
+condition: "(registroDTO.getRefRegistroPatronal() != null || !registroDTO.getRefRegistroPatronal().trim().equals(\"\")) ?
+            (registroDTO.getRefRegistroPatronal().matches(\"^[A-Za-z0-9]{11}$\") ? 
+            (!java.util.Arrays.asList(\"10\", \"13\", \"14\", \"17\", \"30\", \"34\", \"35\", \"38\", \"42\").contains(registroDTO.getRefRegistroPatronal().substring(8, 10))) : false ) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN 004 RegPat Modalidad\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"2\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Estructura del campo\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4032\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Registro Patronal\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU que el Registro Patronal cuenta con las siguientes modalidades: 10, 13, 14, 17, 30, 34, 35, 38 o 42\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 RegPat Incumplida\" ); 10, 13, 14, 17, 30, 34, 35, 38 o 42"
+---
+name: RN004 CURP
+description: RN 004 CURP
+priority: 1
+condition: "!(registroDTO.getRefCurp() == null || registroDTO.getRefCurp().trim().equals(\"\")) ?
+              registroDTO.getRefCurp().matches(\"^[A-Za-z0-9]{18}$\") == false : true"
+actions:
+ 
+ - "registroDTO.setErrorCurp(true)"
+ - #"System.out.println(\"RN 004 CURP Incumplida\" );"
+---
+name: RN004 Tipo de Riesgo Obligatorio
+description: RN004 Tipo de Riesgo Obligatorio
+priority: 1
+condition: "registroDTO.getCveTipoRiesgo() == null || registroDTO.getCveTipoRiesgo().trim().equals(\"\")"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Tipo de Riesgo Obligatorio\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4018\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Tipo de Riesgo\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU que el campo Tipo de Riesgo exista en el cat\u00E1logo.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Tipo de Riesgo Obligatorio\" );"
+---
+name: RN004 Tipo de Riesgo Obligatorio BDTU
+description: RN004 Tipo de Riesgo Obligatorio BDTU
+priority: 1
+condition: "(registroDTO.getCveTipoRiesgo() != null && !registroDTO.getCveTipoRiesgo().trim().equals(\"\")) ?
+            (registroDTO.getTipoRiesgoDTO() == null) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Tipo de Riesgo Obligatorio\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4018\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Tipo de Riesgo\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU que el campo Tipo de Riesgo exista en el cat\u00E1logo.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Tipo de Riesgo Obligatorio\" );"
+---
+name: RN004 Consecuencia Obligatorio
+description: RN004 Consecuencia Obligatorio
+priority: 1
+condition: "registroDTO.getCveConsecuencia() == null || registroDTO.getCveConsecuencia().trim().equals(\"\")"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Consecuencia Obligatorio\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4010\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Consecuencia\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU que el campo Consecuencia exista en el cat\u00E1logo.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Consecuencia Obligatorio\" );"
+---
+name: RN004 Consecuencia Obligatorio BDTU
+description: RN004 Consecuencia Obligatorio BDTU
+priority: 1
+condition: "(registroDTO.getCveConsecuencia() != null && !registroDTO.getCveConsecuencia().trim().equals(\"\")) ? 
+            (registroDTO.getConsecuenciaDTO() == null) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Consecuencia Obligatorio bdtu\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4010\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Consecuencia\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU que el campo Consecuencia exista en el cat\u00E1logo.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Consecuencia Obligatorio\" );"
+---
+name: RN004 Laudo
+description: RN 004 Laudo
+priority: 1
+condition: "registroDTO.getNumLaudo() == null || registroDTO.getNumLaudo().trim().equals(\"\")"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Laudo BDTU\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"5000\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Laudo\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU que el campo Laudos exista en el cat\u00E1logo.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+---
+name: RN004 Laudo BDTU
+description: RN004 Laudo BDTU
+priority: 1
+condition: "(registroDTO.getNumLaudo() != null && !registroDTO.getNumLaudo().trim().equals(\"\")) ? 
+            (registroDTO.getLaudoDTO() == null) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Laudo BDTU\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"5000\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Laudo\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU que el campo Laudos exista en el cat\u00E1logo.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Consecuencia Obligatorio\" );"
+---
+name: RN004 D\u00EDas subsidiados Estructura
+description: RN004 D\u00EDas subsidiados Estructura
+priority: 1 
+condition: "(registroDTO.getNumDiasSubsidiados() != null && !registroDTO.getNumDiasSubsidiados().trim().equals(\"\")) ? 
+            !registroDTO.getNumDiasSubsidiados().matches(\"^[0-9]{3}$\") : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 D\u00EDas subsidiados Estructura\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"2\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Estructura\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4014\")"
+ - "bitacoraErroresDTO.setDesCampo(\"D\u00EDas subsidiados\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo D\u00EDas subsidiados debe ser igual a 0 o menor o igual a 550.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 D\u00EDas subsidiados Estructura\" );"
+---
+name: RN004 D\u00EDas subsidiados 
+description: RN004 D\u00EDas subsidiados 
+priority: 1
+condition: "(registroDTO.getNumDiasSubsidiados() != null && !registroDTO.getNumDiasSubsidiados().trim().equals(\"\")) ? 
+            (registroDTO.getNumDiasSubsidiados().matches(\"^[0-9]{3}$\") ?
+            !(registroDTO.getNumDiasSubsidiados() >= 0 && registroDTO.getNumDiasSubsidiados() <= 550) : false) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 D\u00EDas subsidiados\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"3\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Valor del campo\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4014\")"
+ - "bitacoraErroresDTO.setDesCampo(\"D\u00EDas subsidiados\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo D\u00EDas subsidiados debe ser igual a 0 o menor o igual a 550.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 D\u00EDas subsidiados\" );"
+---
+name: RN004 Porcentaje de Incapacidad 
+description: RN004 Porcentaje de Incapacidad
+priority: 1
+condition: "registroDTO.getPorPorcentajeIncapacidad() == null || registroDTO.getPorPorcentajeIncapacidad.trim().equals(\"\")"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Porcentaje de Incapacidad\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4020\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Porcentaje de Incapacidad\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo Porcentaje de incapacidad debe ser igual a 0 o menor o igual a 100.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Porcentaje de Incapacidad\" );"
+---
+name: RN004 Porcentaje de Incapacidad Mayor
+description: RN004 Porcentaje de Incapacidad Mayor
+priority: 1
+condition: "(registroDTO.getPorPorcentajeIncapacidad() != null && !registroDTO.getPorPorcentajeIncapacidad().trim().equals(\"\") ) ?
+            (registroDTO.getPorPorcentajeIncapacidad().matches(\"^[0-9]{1,3}$\") ? 
+            !(registroDTO.getPorPorcentajeIncapacidad() >= 0 && registroDTO.getPorPorcentajeIncapacidad() <= 100) : true): false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Porcentaje de Incapacidad\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"3\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Valor del campo\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4020\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Porcentaje de Incapacidad\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo Porcentaje de incapacidad debe ser igual a 0 o menor o igual a 100.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Porcentaje de Incapacidad\" );"
+---
+name: RN004 Fecha de inicio Obligatorio
+description: RN004 Fecha de inicio Obligatorio
+priority: 1
+condition: "!(registroDTO.getFecInicio() != null && !registroDTO.getFecInicio().equals(\"\"))"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Fecha de inicio Obligatorio\")"
+ - "bitacoraErroresDTO.setDesValorOriginal(registroDTO.getFecInicio());"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Valor del campo\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4012\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Fecha de inicio\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo Fecha de inicio debe ser menor o igual a la fecha de fin y de proceso de los archivos RTT, ST3 y ST5.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Fecha de inicio Obligatorio\" );"
+---
+name: RN004 Fecha de inicio Menor
+description: RN004 Fecha de inicio Menor
+priority: 1
+condition: "(registroDTO.getFecInicio() != null && registroDTO.getFecInicio().matches(\"^[0-9]{8}$\") &&
+             registroDTO.getFecFin() != null && registroDTO.getFecFin().matches(\"^[0-9]{8}$\") ) ? 
+            !((mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecInicio()).compareTo(
+             mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecFin())) <= 0) && 
+            (mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecInicio()).compareTo(
+             mx.gob.imss.cit.pmc.commons.utils.DateUtils.obtenerFechaActualDate()) <= 0)) : true"
+actions: 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Fecha de inicio Menor\")"
+ - "bitacoraErroresDTO.setDesValorOriginal(registroDTO.getFecInicio());"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Valor del campo\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4012\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Fecha de inicio\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo Fecha de inicio debe ser menor o igual a la fecha de fin y de proceso de los archivos RTT, ST3 y ST5.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Fecha de inicio Menor\" );"
+---
+name: RN004 Fecha de inicio Menor 30 
+description: RN004 Fecha de inicio Menor 30
+priority: 1
+condition: "(registroDTO.getFecInicio() != null && registroDTO.getFecInicio().matches(\"^[0-9]{8}$\")) ?
+             mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecInicio()).compareTo(
+             mx.gob.imss.cit.pmc.commons.utils.DateUtils.obtenerFecha30Date()) < 0 : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Fecha de inicio Menor\")"
+ - "bitacoraErroresDTO.setDesValorOriginal(registroDTO.getFecInicio());"
+ - "bitacoraErroresDTO.setCveTipoError(\"3\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Valor del campo\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4012\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Fecha de inicio\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo fecha de inicio debe ser menor a 30 a\u00F1os anteriores a la fecha de proceso\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Fecha de inicio Menor\" );"
+---
+name: RN004 Fecha de fin Obligatorio
+description: RN004 Fecha de fin Obligatorio
+priority: 1
+condition: "!(registroDTO.getFecFin() != null && !registroDTO.getFecFin().equals(\"\"))"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Fecha de fin Obligatorio\")"
+ - "bitacoraErroresDTO.setDesValorOriginal(registroDTO.getFecFin());"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4016\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Fecha de fin\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo Fecha de inicio debe ser menor o igual a la fecha de fin y de proceso de los archivos RTT, ST3 y ST5.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Fecha de fin Obligatorio\" );"
+---
+name: RN004 Fecha de fin 62
+description: RN004 Fecha de fin 62
+priority: 1
+condition: "(registroDTO.getFecFin() != null && registroDTO.getFecFin().matches(\"^[0-9]{8}$\")) ? 
+            !(mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecFin()).compareTo(
+             mx.gob.imss.cit.pmc.commons.utils.DateUtils.obtenerFecha62Date()) <= 0) : true"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Fecha de fin 62\")"
+ - "bitacoraErroresDTO.setDesValorOriginal(registroDTO.getFecFin());"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4016\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Fecha de fin\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Fecha de proceso adicionarle 62 d\u00EDas naturales y compararlo con la fecha fin, la cual debe ser menor o igual al resultado de la operaci\u00F3n anterior.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Fecha de fin 62\" );"
+---
+name: RN004 Fecha de fin 30 a\u00F1os
+description: RN004 Fecha de fin 30 a\u00F1os
+priority: 1
+condition: "(registroDTO.getFecFin() != null && registroDTO.getFecFin().matches(\"^[0-9]{8}$\")) ? 
+            !(mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecFin()).compareTo(
+             mx.gob.imss.cit.pmc.commons.utils.DateUtils.obtenerFecha30Date()) > 0) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Fecha de fin 30 a\u00F1os\")"
+ - "bitacoraErroresDTO.setDesValorOriginal(registroDTO.getFecFin());"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4016\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Fecha de fin\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo fecha de fin debe ser menor a 30 a\u00F1os anteriores a la fecha de proceso.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Fecha de fin 30 a\u00F1os\" );"
+---
+name: RN004 Fecha de accidente
+description: RN004 Fecha de accidente
+priority: 1
+condition: "(registroDTO.getFecInicioPension() != null && registroDTO.getFecInicioPension().matches(\"^[0-9]{8}$\") &&
+             registroDTO.getFecAccidente() != null && registroDTO.getFecAccidente().matches(\"^[0-9]{8}$\") ) ? 
+            ((mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecAccidente()).compareTo(
+             mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecInicioPension())) > 0) ||
+            (mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecAccidente()).compareTo(
+             mx.gob.imss.cit.pmc.commons.utils.DateUtils.obtenerFecha30Date()) < 0)) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Fecha de accidente\")"
+ - "bitacoraErroresDTO.setDesValorOriginal(registroDTO.getFecAccidente());"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"5001\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Fecha de accidente\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo fecha de accidente debe ser menor a 30 a\u00F1os anteriores a la fecha de proceso y no debe ser mayor a la fecha de inicio de pensi\u00F3n.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Fecha de accidente\" );"
+---
+name: RN004 Fecha de Inicio de Pensi\u00F3n Obligatorio
+description: RN004 Fecha de Inicio de Pensi\u00F3n Obligatorio
+priority: 1
+condition: "!(registroDTO.getFecInicioPension() != null && !registroDTO.getFecInicioPension().equals(\"\"))"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Fecha de inicio de pensi\u00F3n \")"
+ - "bitacoraErroresDTO.setDesValorOriginal(registroDTO.getFecInicioPension());"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"5002\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Fecha de inicio de pensi\u00F3n\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo fecha de inicio de pensi\u00F3n debe ser menor a 3 a\u00F1os anteriores a la fecha de proceso y no debe ser mayor a la fecha de inicio de pensi\u00F3n.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ #"System.out.println(\"RN 004 Fecha de inicio Obligatorio\" );"
+---
+name: RN004 Fecha de inicio de pensi\u00F3n 
+description: RN004 Fecha de inicio de pensi\u00F3n 
+priority: 1
+condition: "(registroDTO.getFecInicioPension() != null && registroDTO.getFecInicioPension().matches(\"^[0-9]{8}$\") &&
+             registroDTO.getFecAccidente() != null && registroDTO.getFecAccidente().matches(\"^[0-9]{8}$\") ) ? 
+            (mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecInicioPension()).compareTo(
+             mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecAccidente())) < 0) || 
+            (mx.gob.imss.cit.pmc.commons.utils.DateUtils.parserFromString(registroDTO.getFecInicioPension()).compareTo(
+             mx.gob.imss.cit.pmc.commons.utils.DateUtils.obtenerFecha30Date()) < 0) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Fecha de inicio de pensi\u00F3n \")"
+ - "bitacoraErroresDTO.setDesValorOriginal(registroDTO.getFecInicioPension());"
+ - "bitacoraErroresDTO.setCveTipoError(\"3\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Valor\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"5002\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Fecha de inicio de pensi\u00F3n\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"El campo fecha de inicio de pensión debe ser menor a 3 a\u00F1os anteriores a la fecha de proceso y no debe ser mayor a la fecha de inicio de pensi\u00F3n.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ #- "System.out.println(\"RN 004 Fecha de inicio de pensi\u00F3n  \" );"
+---
+name: RN004 Consecuencia
+description: RN004 Consecuencia
+priority: 1
+condition: "((registroDTO.getCveConsecuencia() != null && registroDTO.getCveConsecuencia().matches(\"^[0-9]{1}$\"))) ? 
+             (registroDTO.getCveConsecuencia() == 0 ? !(mx.gob.imss.cit.pmc.commons.utils.Utils.validaEntero(registroDTO.getNumDiasSubsidiados()) == 0 && mx.gob.imss.cit.pmc.commons.utils.Utils.validaEntero(registroDTO.getPorPorcentajeIncapacidad()) == 0) : false) : false"
+actions:
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Consecuencia\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4010\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Consecuencia\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU si el campo Tipo de consecuencia es igual a 0, en caso que cumpla la condici\u00F3n, los D\u00EDas subsidiados y el Porcentaje de incapacidad debe ser igual a 0.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Consecuencia\" );"
+---
+name: RN004 Consecuencia 1
+description: RN004 Consecuencia 1
+priority: 1
+condition: "((registroDTO.getCveConsecuencia() != null && registroDTO.getCveConsecuencia().matches(\"^[0-9]{1}$\"))) ? 
+             (registroDTO.getCveConsecuencia() == 1 ? !(mx.gob.imss.cit.pmc.commons.utils.Utils.validaEntero(registroDTO.getNumDiasSubsidiados()) > 0 && mx.gob.imss.cit.pmc.commons.utils.Utils.validaEntero(registroDTO.getPorPorcentajeIncapacidad()) == 0) : false) : false"
+actions:
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Consecuencia\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4010\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Consecuencia\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU si el campo Tipo de consecuencia es igual a 1, en caso que cumpla la condici\u00F3n, los D\u00EDas subsidiados deben ser mayor a 0 y el Porcentaje de incapacidad debe ser igual a 0.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Consecuencia 1\" );"
+---
+name: RN004 Consecuencia 2
+description: RN004 Consecuencia 2
+priority: 1
+condition: "((registroDTO.getCveConsecuencia() != null && registroDTO.getCveConsecuencia().matches(\"^[0-9]{1}$\"))) ? 
+             (java.util.Arrays.asList(\"2\", \"3\", \"6\", \"7\", \"9\").contains(registroDTO.getCveConsecuencia()) ? 
+             !(mx.gob.imss.cit.pmc.commons.utils.Utils.validaEntero(registroDTO.getNumDiasSubsidiados()) >= 0 && mx.gob.imss.cit.pmc.commons.utils.Utils.validaEntero(registroDTO.getPorPorcentajeIncapacidad()) > 0) : false) : false"
+actions:
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Consecuencia\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4010\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Consecuencia\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU si el campo Tipo de consecuencia es igual a 2, 3, 6, 7 o 9, en caso que cumpla la condici\u00F3n, los D\u00EDas subsidiados deben ser igual o mayor 0 y el Porcentaje de incapacidad debe ser mayor a 0.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Consecuencia 2\" );"
+---
+name: RN004 Consecuencia 3
+description: RN004 Consecuencia 3
+priority: 1
+condition: "((registroDTO.getCveConsecuencia() != null && registroDTO.getCveConsecuencia().matches(\"^[0-9]{1}$\"))) ? 
+             (java.util.Arrays.asList(\"5\").contains(registroDTO.getCveConsecuencia()) ? !(mx.gob.imss.cit.pmc.commons.utils.Utils.validaEntero(registroDTO.getNumDiasSubsidiados()) > 0 && mx.gob.imss.cit.pmc.commons.utils.Utils.validaEntero(registroDTO.getPorPorcentajeIncapacidad()) >= 0) : false) : false"
+actions:
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Consecuencia\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4010\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Consecuencia\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU si el campo Tipo de Consecuencia es igual a 5, en caso que cumpla la condici\u00F3n, los D\u00EDas subsidiados deben ser mayor a 0 y el Porcentaje de incapacidad debe ser mayor \u00F3 igual a 0.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+ - #"System.out.println(\"RN 004 Consecuencia 3\" );"
+---
+name: RN004 Tipo Incapacidad Obligatorio
+description: RN 004 Tipo Incapacidad Obligatorio
+priority: 1
+condition: "registroDTO.getCveTipoIncapacidad() == null || registroDTO.getCveTipoIncapacidad().trim().equals(\"\")"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Tipo Incapacidad\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"5005\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Tipo Incapacidad\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en el repositorio de datos que el campo Tipo de Incapacidad exista en el cat\u00E1logo.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+---
+name: RN004 Tipo Incapacidad Obligatorio BDTU
+description: RN004 Tipo Incapacidad Obligatorio BDTU
+priority: 1
+condition: "(registroDTO.getCveTipoIncapacidad() != null && !registroDTO.getCveTipoIncapacidad().trim().equals(\"\")) ? 
+            (registroDTO.getTipoIncapacidadDTO() == null) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Tipo Incapacidad Obligatorio\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"5005\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Tipo Incapacidad\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en el repositorio de datos que el campo Tipo de Incapacidad exista en el cat\u00E1logo.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+---
+name: Paso Al
+description: Paso Al
+priority: 1
+condition: "registroDTO.isPasoAl() == true ? 
+            (registroDTO.getCveDelegacionNss() == null || registroDTO.getCveDelegacionNss().trim().equals(\"\") || registroDTO.getDelegacionAdscripcionDTO() == null ||
+            registroDTO.getCveSubdelNss() == null || registroDTO.getCveSubdelNss().trim().equals(\"\") || registroDTO.getSubDelegacionAdscripcionDTO() == null ||
+            registroDTO.getCveUmfAdscripcion() == null || registroDTO.getCveUmfAdscripcion().trim().equals(\"\") || registroDTO.getUmfAdscripcionDTO() == null) : false"
+actions:
+ 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"Paso Al - Datos Adscripci\u00F3n Obligatorios\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"5006\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Paso Al\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"No existe informaci\u00F3n de la Delegación de Adscripci\u00F3n, de la Subdelegaci\u00F3n de adscripci\u00F3n y de la UMF de adscripci\u00F3n del NSS que se identifica como PASO AL.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
+---
+name: RN004 Tipo de Riesgo Obligatorio
+description: RN 004 Tipo de Riesgo Obligatorio
+priority: 1
+condition: "registroDTO.getCveTipoRiesgo() == null || registroDTO.getCveTipoRiesgo().trim().equals(\"\")"
+actions: 
+ - "mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO bitacoraErroresDTO = new mx.gob.imss.cit.pmc.commons.dto.BitacoraErroresDTO()"
+ - "bitacoraErroresDTO.setDesError(\"RN004 Tipo de Riesgo\")"
+ - "bitacoraErroresDTO.setCveTipoError(\"1\")"
+ - "bitacoraErroresDTO.setDesTipoError(\"Obligatorio\")"
+ - "bitacoraErroresDTO.setCveIdCodigoError(\"4018\")"
+ - "bitacoraErroresDTO.setDesCampo(\"Tipo de Riesgo\");"
+ - "bitacoraErroresDTO.setDesCodigoError(\"Validar en BDTU que el campo Tipo de Riesgo exista en el cat\u00E1logo.\")"
+ - "bitacoraErroresDTO.setFecAlta(java.util.Calendar.getInstance().getTime());"
+ - "errores.add(bitacoraErroresDTO)"
